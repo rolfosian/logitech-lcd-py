@@ -22,96 +22,96 @@ LOGI_LCD_MONO_HEIGHT = 43
 LOGI_LCD_COLOR_WIDTH = 320
 LOGI_LCD_COLOR_HEIGHT = 240
 
-class Logi_LCD:
+class Logi_LCD(WinDLL):
     def __init__(self, applet_name: str, lcd_type: int):
-        self.LOGI_LCD = WinDLL('C:\\Program Files\\Logitech Gaming Software\\SDK\\LCD\\x64\\LogitechLcd.dll')
+        super().__init__('C:\\Program Files\\Logitech Gaming Software\\SDK\\LCD\\x64\\LogitechLcd.dll')
 
-        self.LOGI_LCD.LogiLcdInit.argtypes = [c_wchar_p, c_int]
-        self.LOGI_LCD.LogiLcdInit.restype = c_bool
+        self.LogiLcdInit.argtypes = [c_wchar_p, c_int]
+        self.LogiLcdInit.restype = c_bool
 
-        self.LOGI_LCD.LogiLcdIsConnected.argtypes = [c_int]
-        self.LOGI_LCD.LogiLcdIsConnected.restype = c_bool
+        self.LogiLcdIsConnected.argtypes = [c_int]
+        self.LogiLcdIsConnected.restype = c_bool
 
-        self.LOGI_LCD.LogiLcdIsButtonPressed.argtypes = [c_int]
-        self.LOGI_LCD.LogiLcdIsButtonPressed.restype = c_bool
+        self.LogiLcdIsButtonPressed.argtypes = [c_int]
+        self.LogiLcdIsButtonPressed.restype = c_bool
 
-        self.LOGI_LCD.LogiLcdUpdate.argtypes = []
-        self.LOGI_LCD.LogiLcdUpdate.restype = None
+        self.LogiLcdUpdate.argtypes = []
+        self.LogiLcdUpdate.restype = None
 
-        self.LOGI_LCD.LogiLcdShutdown.argtypes = []
-        self.LOGI_LCD.LogiLcdShutdown.restype = None
+        self.LogiLcdShutdown.argtypes = []
+        self.LogiLcdShutdown.restype = None
 
-        self.LOGI_LCD.LogiLcdMonoSetBackground.argtypes = [POINTER(c_byte)]
-        self.LOGI_LCD.LogiLcdMonoSetBackground.restype = c_bool
+        self.LogiLcdMonoSetBackground.argtypes = [POINTER(c_byte)]
+        self.LogiLcdMonoSetBackground.restype = c_bool
 
-        self.LOGI_LCD.LogiLcdMonoSetText.argtypes = [c_int, c_wchar_p]
-        self.LOGI_LCD.LogiLcdMonoSetText.restype = c_bool
+        self.LogiLcdMonoSetText.argtypes = [c_int, c_wchar_p]
+        self.LogiLcdMonoSetText.restype = c_bool
 
-        self.LOGI_LCD.LogiLcdColorSetBackground.argtypes = [POINTER(c_byte)]
-        self.LOGI_LCD.LogiLcdColorSetBackground.restype = c_bool
+        self.LogiLcdColorSetBackground.argtypes = [POINTER(c_byte)]
+        self.LogiLcdColorSetBackground.restype = c_bool
 
-        self.LOGI_LCD.LogiLcdColorSetTitle.argtypes = [c_wchar_p, c_int, c_int, c_int]
-        self.LOGI_LCD.LogiLcdColorSetTitle.restype = c_bool
+        self.LogiLcdColorSetTitle.argtypes = [c_wchar_p, c_int, c_int, c_int]
+        self.LogiLcdColorSetTitle.restype = c_bool
 
-        self.LOGI_LCD.LogiLcdColorSetText.argtypes = [c_int, c_wchar_p, c_int, c_int, c_int]
-        self.LOGI_LCD.LogiLcdColorSetText.restype = c_bool
+        self.LogiLcdColorSetText.argtypes = [c_int, c_wchar_p, c_int, c_int, c_int]
+        self.LogiLcdColorSetText.restype = c_bool
 
-        self.LOGI_LCD.LogiLcdColorSetBackgroundUDK.argtypes = [POINTER(c_byte), c_int]
-        self.LOGI_LCD.LogiLcdColorSetBackgroundUDK.restype = c_int
+        self.LogiLcdColorSetBackgroundUDK.argtypes = [POINTER(c_byte), c_int]
+        self.LogiLcdColorSetBackgroundUDK.restype = c_int
 
-        self.LOGI_LCD.LogiLcdColorResetBackgroundUDK.argtypes = []
-        self.LOGI_LCD.LogiLcdColorResetBackgroundUDK.restype = c_int
+        self.LogiLcdColorResetBackgroundUDK.argtypes = []
+        self.LogiLcdColorResetBackgroundUDK.restype = c_int
 
-        self.LOGI_LCD.LogiLcdMonoSetBackgroundUDK.argtypes = [POINTER(c_byte), c_int]
-        self.LOGI_LCD.LogiLcdMonoSetBackgroundUDK.restype = c_int
+        self.LogiLcdMonoSetBackgroundUDK.argtypes = [POINTER(c_byte), c_int]
+        self.LogiLcdMonoSetBackgroundUDK.restype = c_int
 
-        self.LOGI_LCD.LogiLcdMonoResetBackgroundUDK.argtypes = []
-        self.LOGI_LCD.LogiLcdMonoResetBackgroundUDK.restype = c_int
+        self.LogiLcdMonoResetBackgroundUDK.argtypes = []
+        self.LogiLcdMonoResetBackgroundUDK.restype = c_int
         
-        self.LOGI_LCD.LogiLcdInit(c_u_b(applet_name), lcd_type)
+        self.LogiLcdInit(c_u_b(applet_name), lcd_type)
 
     def is_connected(self, lcd_type: int) -> bool:
-        return self.LOGI_LCD.LogiLcdIsConnected(lcd_type)
+        return self.LogiLcdIsConnected(lcd_type)
 
     def is_button_pressed(self, button: int) -> bool:
-        return self.LOGI_LCD.LogiLcdIsButtonPressed(button)
+        return self.LogiLcdIsButtonPressed(button)
 
     def update(self) -> None:
-        self.LOGI_LCD.LogiLcdUpdate()
+        self.LogiLcdUpdate()
 
     def shutdown(self) -> None:
-        self.LOGI_LCD.LogiLcdShutdown()
+        self.LogiLcdShutdown()
 
     def mono_set_background(self, background: bytes) -> bool:
         bg_array = (c_byte * len(background))(*background)
-        return self.LOGI_LCD.LogiLcdMonoSetBackground(bg_array)
+        return self.LogiLcdMonoSetBackground(bg_array)
 
     def mono_set_text(self, row: int, text: str) -> bool:
-        return self.LOGI_LCD.LogiLcdMonoSetText(row, c_u_b(text))
+        return self.LogiLcdMonoSetText(row, c_u_b(text))
 
     def color_set_background(self, background: bytes) -> bool:
         bg_array = (c_byte * len(background))(*background)
-        return self.LOGI_LCD.LogiLcdColorSetBackground(bg_array)
+        return self.LogiLcdColorSetBackground(bg_array)
 
     def color_set_title(self, title: str, r: int, g: int, b: int) -> bool:
-        return self.LOGI_LCD.LogiLcdColorSetTitle(c_u_b(title), r, g, b)
+        return self.LogiLcdColorSetTitle(c_u_b(title), r, g, b)
 
     def color_set_text(self, row: int, text: str, r: int, g: int, b: int) -> bool:
-        return self.LOGI_LCD.LogiLcdColorSetText(row, c_u_b(text), r, g, b)
+        return self.LogiLcdColorSetText(row, c_u_b(text), r, g, b)
 
     def color_set_background_udk(self, background: bytes, size: int) -> int:
         bg_array = (c_byte * len(background))(*background)
-        return self.LOGI_LCD.LogiLcdColorSetBackgroundUDK(bg_array, size)
+        return self.LogiLcdColorSetBackgroundUDK(bg_array, size)
 
     def color_reset_background_udk(self) -> int:
-        return self.LOGI_LCD.LogiLcdColorResetBackgroundUDK()
+        return self.LogiLcdColorResetBackgroundUDK()
 
     def mono_set_background_udk(self, background: bytes, size: int) -> int:
         bg_array = (c_byte * len(background))(*background)
-        return self.LOGI_LCD.LogiLcdMonoSetBackgroundUDK(bg_array, size)
+        return self.LogiLcdMonoSetBackgroundUDK(bg_array, size)
 
     def mono_reset_background_udk(self) -> int:
-        return self.LOGI_LCD.LogiLcdMonoResetBackgroundUDK()
+        return self.LogiLcdMonoResetBackgroundUDK()
 
 # Testing with monochrome Logitech G15 LCD
 if __name__ == "__main__":
